@@ -66,10 +66,10 @@ with open('final_paper_scores.csv', newline='') as csvfile:
 
 		context = {
 			"name": row[0],
-			"section_one": score_rubric[1][int(row[1])],
-			"section_two": score_rubric[2][int(row[2])],
-			"section_three": score_rubric[3][int(row[3])],
-			"section_four": score_rubric[4][int(row[4])],
+			"1": score_rubric[1][int(row[1])],
+			"2": score_rubric[2][int(row[2])],
+			"3": score_rubric[3][int(row[3])],
+			"4": score_rubric[4][int(row[4])],
 			"final_grade": {
 				"points": total_score,
 				"available_points": 200,
@@ -80,7 +80,7 @@ with open('final_paper_scores.csv', newline='') as csvfile:
 		print(context)
 
 		# fill in the html with the context
-		sourceHtml = template.render(json_data=context)
+		sourceHtml = template.render(context=context)
 
 		# process the html into a pdf, name it correctly
 		file_name = context["name"] + ".pdf"

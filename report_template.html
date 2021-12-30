@@ -19,21 +19,25 @@
     <table class="table">
         <thead style="border: 1px solid black">
             <tr>
-                <th>Section One</th>
-                <th>Section Two</th>
-                <th>Section Three</th>
-                <th>Section Four</th>
+                <th>context["1"]["name"]</th>
+                <th>context["2"]["name"]</th>
+                <th>context["3"]["name"]</th>
+                <th>context["4"]["name"]</th>
             </tr>
         </thead>
         <tr>
-            </tr>
+            <td>{{ section_one["description"] }}<br>({{ section_one["points"] }} points)</td>
+            <td>{{ section_two["description"] }}<br>({{ section_two["points"] }} points)</td>
+            <td>{{ section_three["description"] }}<br>({{ section_three["points"] }} points)</td>
+            <td>{{ section_four["description"] }}<br>({{ section_four["points"] }} points)</td>
+        </tr>
         <tfoot>
             <tr>
-                <td class="text-end"><strong>Total:</strong> {{ final_grade["points"] }} points</td>
+                <td class="text-end"><strong>Total:</strong> {{ context["final_grade"]["points"] }} points</td>
             </tr>
         </tfoot>
     </table>
 
-    <h3>Final Grade: (B)
+    <h3>Final Grade: {{context["final_grade"]["points"]}} / {{ context["final_grade"]["available_points"] }} ({{ context["final_grade"]["letter"] }})
 </body>
 </html>
