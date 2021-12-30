@@ -1,5 +1,6 @@
 import csv
 import pdfkit
+# import wkhtmltopdf
 import jinja2
 
 # This is a bunch of stuff I copied and pasted from Stack Overflow.
@@ -15,43 +16,60 @@ with open('rubric.csv', newline='') as csvfile:
 	rubric_rows = csv.reader(csvfile, delimiter=',')
 	# call next() once to skip the first row, which is just headers
 	next(rubric_rows, None)
+	counter = 1
 	for row in rubric_rows:
-		score_rubric[row[0]] = {
-			1: {"description": row[1], "points": row[2]},
-			2: {"description": row[3], "points": row[4]},
-			3: {"description": row[5], "points": row[6]},
-			4: {"description": row[7], "points": row[8]},
-	},
+		score_rubric[counter] = {
+			"name": row[0],
+			1: {"description": row[1], "points": int(row[2])},
+			2: {"description": row[3], "points": int(row[4])},
+			3: {"description": row[5], "points": int(row[6])},
+			4: {"description": row[7], "points": int(row[8])},
+		}
+		counter += 1
 
 # Open the scores csv, iterate through the rows:
 	# create a template context for the student
+
+print(score_rubric)
 
 with open('final_paper_scores.csv', newline='') as csvfile:
 	paper_scores = csv.reader(csvfile, delimiter=',', quotechar='|')
 	# call next() once to skip the first row, which is just headers
 	next(paper_scores, None)
 	for row in paper_scores:
+		total_score = 0
+		# for k, v in score_rubric.items():
+		# 	# import pdb; pdb.set_trace()
+		# 	# print(v)
+		# 	total_score += int(v[int(row[1])]["points"])
+		# 	total_score += int(v[int(row[2])]["points"])
+		# 	total_score += int(v[int(row[3])]["points"])
+		# 	total_score += int(v[int(row[4])]["points"])
+
 
 		total_score = (
-			score_rubric["section_one"][row[1]]["points"] +
-			score_rubric["section_two"][row[2]]["points"] +
-			score_rubric["section_three"][row[3]]["points"] +
-			score_rubric["section_four"][row[4]]["points"]
+			score_rubric[1][int(row[1])]["points"] +
+			score_rubric[2][int(row[2])]["points"] +
+			score_rubric[3][int(row[3])]["points"] +
+			score_rubric[4][int(row[4])]["points"]
 		)
 
-		if 190 <= total_score between <= 200:
+		print("total score:")
+		print(total_score)
+
+		if 190 <= total_score <= 200:
 			letter = "A"
-		elif 180 <= total_score between <= 189:
+		elif 180 <= total_score <= 189:
 			letter = "A-"
 		else:
 			letter = "F"
 
 		context = {
 			"name": row[0],
-			"section_one": score_rubric["section_one"][row[1]],
-			"section_two": score_rubric["section_two"][row[2]],
-			"section_three": score_rubric["section_three"][row[3]],
-			"section_four": score_rubric["section_four"][row[4]],
+			"section_one": score_rubric[1][int(row[1])],
+			"section_two": score_rubric[2][int(row[2])],
+			"section_three": score_rubric[3][int(row[3])],
+			"section_four": score_rubric[4][int(row[4])],
 			"final_grade": {
 				"points": total_score,
 				"available_points": 200,
@@ -59,9 +77,11 @@ with open('final_paper_scores.csv', newline='') as csvfile:
 			},
 		}
 
+		print(context)
+
 		# fill in the html with the context
 		sourceHtml = template.render(json_data=context)
 
 		# process the html into a pdf, name it correctly
-		file_name = name + ".pdf"
+		file_name = context["name"] + ".pdf"
 		pdfkit.from_string(sourceHtml, file_name)
