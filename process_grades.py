@@ -1,7 +1,15 @@
 import csv
+import pdfkit
+import jinja2
+
+# This is a bunch of stuff I copied and pasted from Stack Overflow.
+# It processes html templates.
+templateLoader = jinja2.FileSystemLoader(searchpath="./")
+templateEnv = jinja2.Environment(loader=templateLoader)
+TEMPLATE_FILE = "report_template.html"
+template = templateEnv.get_template(TEMPLATE_FILE)
 
 # Open the rubric csv and establish a bunch of variables
-
 score_rubric = {}
 with open('rubric.csv', newline='') as csvfile:
 	rubric_rows = csv.reader(csvfile, delimiter=',')
@@ -52,6 +60,8 @@ with open('final_paper_scores.csv', newline='') as csvfile:
 		}
 
 		# fill in the html with the context
+		sourceHtml = template.render(json_data=context)
+
 		# process the html into a pdf, name it correctly
-
-
+		file_name = name + ".pdf"
+		pdfkit.from_string(sourceHtml, file_name)
