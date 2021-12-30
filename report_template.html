@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table {border: 1px solid black; border-collapse: collapse;}
+        th {border: 1px solid black; border-collapse: collapse;}
+        td {border: 1px solid black; border-collapse: collapse;}
+    </style>
+</head>
+<body style="padding: 3rem">
+    <h1>Final Paper</h1>
+    Shaping the Modern World<br />
+    Spring 2022<br />
+    Danielle Bennett
+
+    <h3>Student Name: {{ name }}</h3>
+
+    <br><br><br>
+    <table class="table">
+        <thead style="border: 1px solid black">
+            <tr>
+                <th>Section One</th>
+                <th>Section Two</th>
+                <th>Section Three</th>
+                <th>Section Four</th>
+            </tr>
+        </thead>
+        <tr>
+            <td>{{ section_one["description"] }}<br>({{ section_one["points"] }} points)</td>
+            <td>{{ section_two["description"] }}<br>({{ section_two["points"] }} points)</td>
+            <td>{{ section_three["description"] }}<br>({{ section_three["points"] }} points)</td>
+            <td>{{ section_four["description"] }}<br>({{ section_four["points"] }} points)</td>
+        </tr>
+        <tfoot>
+            <tr>
+                <td class="text-end"><strong>Total:</strong> {{ final_grade["points"] }} points</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <h3>Final Grade: {{final_grade["points"]}} / {{ final_grade["available_points"] }} ({{ final_grade["letter"] }})
+</body>
+</html>
