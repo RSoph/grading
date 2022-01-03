@@ -32,48 +32,84 @@ with open('rubric.csv', newline='') as csvfile:
 
 print(score_rubric)
 
+available_points = 200
+letters = {
+	10: "A",
+	9: "A",
+	8: "B",
+	7: "C",
+	6: "D",
+}
+adjustments = {
+	9: "+",
+	8: "+",
+	7: "+",
+	6: "",
+	5: "",
+	4: "",
+	3: "-",
+	2: "-",
+	0: "-",
+}
+
 with open('final_paper_scores.csv', newline='') as csvfile:
 	paper_scores = csv.reader(csvfile, delimiter=',', quotechar='|')
 	# call next() once to skip the first row, which is just headers
 	next(paper_scores, None)
 	for row in paper_scores:
-		total_score = 0
-		# for k, v in score_rubric.items():
-		# 	# import pdb; pdb.set_trace()
-		# 	# print(v)
-		# 	total_score += int(v[int(row[1])]["points"])
-		# 	total_score += int(v[int(row[2])]["points"])
-		# 	total_score += int(v[int(row[3])]["points"])
-		# 	total_score += int(v[int(row[4])]["points"])
-
-
 		total_score = (
 			score_rubric[1][int(row[1])]["points"] +
 			score_rubric[2][int(row[2])]["points"] +
 			score_rubric[3][int(row[3])]["points"] +
 			score_rubric[4][int(row[4])]["points"]
 		)
-
 		print("total score:")
 		print(total_score)
 
-		if 190 <= total_score <= 200:
-			letter = "A"
-		elif 180 <= total_score <= 189:
-			letter = "A-"
+		percent = (total_score / available_points) * 100
+
+		if percent == 100:
+			grade = "A"
+		elif (percent // 10) in letters:
+			letter_grade = letters[percent // 10]
+			adjustment = adjustments[percent % 10]
+			grade = letter_grade + adjustment
 		else:
-			letter = "F"
+			grade = "F"
+
+		if grade == "A+":
+			grade = "A"
 
 		context = {
-			"name": row[0],
-			"1": score_rubric[1][int(row[1])],
-			"2": score_rubric[2][int(row[2])],
-			"3": score_rubric[3][int(row[3])],
-			"4": score_rubric[4][int(row[4])],
+			"student": {
+				"name": row[0]
+			},
+			"sections": {
+				"1": {
+					"name": score_rubric[1]["name"],
+					"tier_description": score_rubric[1][int(row[1])]["description"],
+					"tier_points": score_rubric[1][int(row[1])]["points"],
+				},
+				"2": {
+					"name": score_rubric[2]["name"],
+					"tier_description": score_rubric[2][int(row[2])]["description"],
+					"tier_points": score_rubric[2][int(row[2])]["points"],
+				},
+				"3": {
+					"name": score_rubric[3]["name"],
+					"tier_description": score_rubric[3][int(row[3])]["description"],
+					"tier_points": score_rubric[3][int(row[3])]["points"],
+				},
+				"4": {
+					"name": score_rubric[4]["name"],
+					"tier_description": score_rubric[4][int(row[4])]["description"],
+					"tier_points": score_rubric[4][int(row[4])]["points"],
+				},
+			},
 			"final_grade": {
 				"points": total_score,
-				"available_points": 200,
-				"letter": letter,
+				"available_points": available_points,
+				"letter": grade,
 			},
 		}
 
@@ -83,5 +119,5 @@ with open('final_paper_scores.csv', newline='') as csvfile:
 		sourceHtml = template.render(context=context)
 
 		# process the html into a pdf, name it correctly
-		file_name = context["name"] + ".pdf"
+		file_name = context["student"]["name"] + ".pdf"
 		pdfkit.from_string(sourceHtml, file_name)

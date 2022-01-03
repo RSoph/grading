@@ -2,7 +2,7 @@
 <html>
 <head>
     <style>
-        table {border: 1px solid black; border-collapse: collapse;}
+        table {border: 1px solid black; border-collapse: collapse; width: 100%;}
         th {border: 1px solid black; border-collapse: collapse;}
         td {border: 1px solid black; border-collapse: collapse;}
     </style>
@@ -13,23 +13,23 @@
     Spring 2022<br />
     Danielle Bennett
 
-    <h3>Student Name: {{ name }}</h3>
+    <h3>Student Name: {{ context["student"]["name"] }}</h3>
 
-    <br><br><br>
+    <br>
     <table class="table">
         <thead style="border: 1px solid black">
             <tr>
-                <th>context["1"]["name"]</th>
-                <th>context["2"]["name"]</th>
-                <th>context["3"]["name"]</th>
-                <th>context["4"]["name"]</th>
+                <th>{{ context["sections"]["1"]["name"] }}</th>
+                <th>{{ context["sections"]["2"]["name"] }}</th>
+                <th>{{ context["sections"]["3"]["name"] }}</th>
+                <th>{{ context["sections"]["4"]["name"] }}</th>
             </tr>
         </thead>
         <tr>
-            <td>{{ section_one["description"] }}<br>({{ section_one["points"] }} points)</td>
-            <td>{{ section_two["description"] }}<br>({{ section_two["points"] }} points)</td>
-            <td>{{ section_three["description"] }}<br>({{ section_three["points"] }} points)</td>
-            <td>{{ section_four["description"] }}<br>({{ section_four["points"] }} points)</td>
+            <td>{{ context["sections"]["1"]["tier_description"] }}<br>({{ context["sections"]["1"]["tier_points"] }} points)</td>
+            <td>{{ context["sections"]["2"]["tier_description"] }}<br>({{ context["sections"]["2"]["tier_points"] }} points)</td>
+            <td>{{ context["sections"]["3"]["tier_description"] }}<br>({{ context["sections"]["3"]["tier_points"] }} points)</td>
+            <td>{{ context["sections"]["4"]["tier_description"] }}<br>({{ context["sections"]["4"]["tier_points"] }} points)</td>
         </tr>
         <tfoot>
             <tr>
