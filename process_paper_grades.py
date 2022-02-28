@@ -6,7 +6,7 @@ import jinja2
 # It processes html templates.
 templateLoader = jinja2.FileSystemLoader(searchpath="./")
 templateEnv = jinja2.Environment(loader=templateLoader)
-TEMPLATE_FILE = "report_template.html"
+TEMPLATE_FILE = "paper_report_template.html"
 template = templateEnv.get_template(TEMPLATE_FILE)
 
 def letter_grade(percent):
@@ -43,7 +43,7 @@ def letter_grade(percent):
 
 # Open the rubric csv and establish a bunch of variables
 score_rubric = {}
-with open('rubric.csv', newline='') as csvfile:
+with open('paper_rubric.csv', newline='') as csvfile:
 	rubric_rows = csv.reader(csvfile, delimiter='	')
 	# call next() once to skip the first row, which is just headers
 	next(rubric_rows, None)
@@ -63,7 +63,7 @@ with open('rubric.csv', newline='') as csvfile:
 		counter += 1
 
 # Open the scores csv, iterate through the rows:
-with open('final_paper_scores.csv', newline='') as csvfile:
+with open('paper_scores.csv', newline='') as csvfile:
 	paper_scores = csv.reader(csvfile, delimiter='	', quotechar='|')
 	# call next() once to skip the first row, which is just headers
 	next(paper_scores, None)
@@ -108,5 +108,5 @@ with open('final_paper_scores.csv', newline='') as csvfile:
 		sourceHtml = template.render(context=context)
 
 		# process the html into a pdf, name it correctly
-		file_name = context["student"]["name"] + ".pdf"
+		file_name = context["student"]["name"] + "final paper.pdf"
 		pdfkit.from_string(sourceHtml, file_name)
