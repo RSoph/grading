@@ -3,7 +3,7 @@ Running notes:
 To download data from Google Drive, make sure you get tab seperated values. Google uses tab seperated values by default, and if you c&p straight from the browser that's what you'll get. You'll also get a ton of blank lines at the end which will process as students with empty pdfs, so look out for that.
 
 The run command is
-`python3 process_grades.py`
+`python3 process_paper_grades.py`
 
 Don't forget the 3!
 

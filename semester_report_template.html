@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table {border: 1px solid black; border-collapse: collapse; width: 100%;}
+        th {border: 1px solid black; border-collapse: collapse;}
+        td {border: 1px solid black; border-collapse: collapse;}
+    </style>
+</head>
+<body style="padding: 3rem">
+    <h1>Final Paper</h1>
+    Shaping the Modern World<br />
+    Spring 2022<br />
+    Danielle Bennett
+
+    <h3>Student Name: {{ context["student"]["name"] }}</h3>
+
+    <br>
+    <table class="table">
+        <thead style="border: 1px solid black">
+            <tr>
+                <th>{{ context["sections"]["1"]["name"] }}</th>
+                <th>{{ context["sections"]["2"]["name"] }}</th>
+                <th>{{ context["sections"]["3"]["name"] }}</th>
+                <th>{{ context["sections"]["4"]["name"] }}</th>
+            </tr>
+        </thead>
+        <tr>
+            <td>{{ context["sections"]["1"]["tier_description"] }}<br>({{ context["sections"]["1"]["tier_points"] }} points)</td>
+            <td>{{ context["sections"]["2"]["tier_description"] }}<br>({{ context["sections"]["2"]["tier_points"] }} points)</td>
+            <td>{{ context["sections"]["3"]["tier_description"] }}<br>({{ context["sections"]["3"]["tier_points"] }} points)</td>
+            <td>{{ context["sections"]["4"]["tier_description"] }}<br>({{ context["sections"]["4"]["tier_points"] }} points)</td>
+        </tr>
+        <tfoot>
+            <tr>
+                <td class="text-end"><strong>Total:</strong> {{ context["final_grade"]["points"] }} points</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <h3>Final Grade: {{context["final_grade"]["points"]}}/{{ context["final_grade"]["available_points"] }} ({{ context["final_grade"]["percent"] }}% {{ context["final_grade"]["letter"] }})
+</body>
+</html>
