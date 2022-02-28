@@ -1,5 +1,5 @@
-section name,tier 1 description,tier 1 points,tier 2 description,tier 2 points,tier 3 description,tier 3 points,tier 4 description,tier 4 points
-class topic connections,Makes excellent connections,60,makes so-so connections,55,makes bad connections,45,makes no connections at all,0
-another section name,Really good job!,60,Pretty good,55,Good enough,45,Really bad,0
-a third section name,Really good job!,60,Pretty good,55,Good enough,45,Really bad,0
-a third fourth name,Really good job!,60,Pretty good,55,Good enough,45,Really bad,0
+section name	tier 1 description	tier 1 points	tier 2 description	tier 2 points	tier 3 description	tier 3 points	tier 4 description	tier 4 points
+class topic connections	Makes excellent connections	60	makes so-so connections	55	makes bad connections	45	makes no connections at all	0
+another section name	Really good job!	60	Pretty good	55	Good enough	45	Really bad	0
+a third section name	Really good job!	60	Pretty good	55	Good enough	45	Really bad	0
+a fourth section name	Really good job!	60	Pretty good	55	Good enough	45	Really bad	0

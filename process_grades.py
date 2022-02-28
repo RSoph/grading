@@ -1,6 +1,5 @@
 import csv
 import pdfkit
-# import wkhtmltopdf
 import jinja2
 
 # This is a bunch of stuff I copied and pasted from Stack Overflow.
@@ -10,13 +9,46 @@ templateEnv = jinja2.Environment(loader=templateLoader)
 TEMPLATE_FILE = "report_template.html"
 template = templateEnv.get_template(TEMPLATE_FILE)
 
+def letter_grade(percent):
+	letters = {
+		9: "A",
+		8: "B",
+		7: "C",
+		6: "D",
+	}
+	adjustments = {
+		9: "+",
+		8: "+",
+		7: "+",
+		6: "",
+		5: "",
+		4: "",
+		3: "",
+		2: "-",
+		1: "-",
+		0: "-",
+	}
+	if percent >= 100:
+		return "A"
+	elif (percent // 10) in letters:
+		letter_grade = letters[percent // 10] # floordiv(percent, 10), gives just the tens digit.
+		adjustment = adjustments[round(percent % 10, 0)] # mod(percent, 10) gives the ones only, then round to nearest integer.
+		grade = letter_grade + adjustment
+		if grade == "A+":
+			return "A"
+		else:
+			return grade
+	else:
+		return "F"
+
 # Open the rubric csv and establish a bunch of variables
 score_rubric = {}
 with open('rubric.csv', newline='') as csvfile:
-	rubric_rows = csv.reader(csvfile, delimiter=',')
+	rubric_rows = csv.reader(csvfile, delimiter='	')
 	# call next() once to skip the first row, which is just headers
 	next(rubric_rows, None)
 	counter = 1
+	available_points = 0
 	for row in rubric_rows:
 		score_rubric[counter] = {
 			"name": row[0],
@@ -25,38 +57,18 @@ with open('rubric.csv', newline='') as csvfile:
 			3: {"description": row[5], "points": int(row[6])},
 			4: {"description": row[7], "points": int(row[8])},
 		}
+		# This assumes that the top tier for each section gets
+		# maximum points, i.e. 60 out of 60.
+		available_points += int(row[2])
 		counter += 1
 
 # Open the scores csv, iterate through the rows:
-	# create a template context for the student
-
-print(score_rubric)
-
-available_points = 200
-letters = {
-	10: "A",
-	9: "A",
-	8: "B",
-	7: "C",
-	6: "D",
-}
-adjustments = {
-	9: "+",
-	8: "+",
-	7: "+",
-	6: "",
-	5: "",
-	4: "",
-	3: "-",
-	2: "-",
-	0: "-",
-}
-
 with open('final_paper_scores.csv', newline='') as csvfile:
-	paper_scores = csv.reader(csvfile, delimiter=',', quotechar='|')
+	paper_scores = csv.reader(csvfile, delimiter='	', quotechar='|')
 	# call next() once to skip the first row, which is just headers
 	next(paper_scores, None)
 	for row in paper_scores:
+		# Each row represents one student. Create a template context for them.
 		total_score = (
 			score_rubric[1][int(row[1])]["points"] +
 			score_rubric[2][int(row[2])]["points"] +
@@ -66,52 +78,29 @@ with open('final_paper_scores.csv', newline='') as csvfile:
 		print("total score:")
 		print(total_score)
 
-		percent = (total_score / available_points) * 100
-
-		if percent == 100:
-			grade = "A"
-		elif (percent // 10) in letters:
-			letter_grade = letters[percent // 10]
-			adjustment = adjustments[percent % 10]
-			grade = letter_grade + adjustment
-		else:
-			grade = "F"
-
-		if grade == "A+":
-			grade = "A"
+		percent = round(((total_score / available_points) * 100), 2)
+		grade = letter_grade(percent)
 
 		context = {
 			"student": {
 				"name": row[0]
 			},
 			"sections": {
-				"1": {
-					"name": score_rubric[1]["name"],
-					"tier_description": score_rubric[1][int(row[1])]["description"],
-					"tier_points": score_rubric[1][int(row[1])]["points"],
-				},
-				"2": {
-					"name": score_rubric[2]["name"],
-					"tier_description": score_rubric[2][int(row[2])]["description"],
-					"tier_points": score_rubric[2][int(row[2])]["points"],
-				},
-				"3": {
-					"name": score_rubric[3]["name"],
-					"tier_description": score_rubric[3][int(row[3])]["description"],
-					"tier_points": score_rubric[3][int(row[3])]["points"],
-				},
-				"4": {
-					"name": score_rubric[4]["name"],
-					"tier_description": score_rubric[4][int(row[4])]["description"],
-					"tier_points": score_rubric[4][int(row[4])]["points"],
-				},
 			},
 			"final_grade": {
 				"points": total_score,
 				"available_points": available_points,
+				"percent": percent,
 				"letter": grade,
 			},
 		}
+
+		for i in range(1, 5):
+			context["sections"][str(i)] = {
+					"name": score_rubric[i]["name"],
+					"tier_description": score_rubric[i][int(row[i])]["description"],
+					"tier_points": score_rubric[i][int(row[i])]["points"],
+				}
 
 		print(context)
 
