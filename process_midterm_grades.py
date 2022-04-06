@@ -6,7 +6,7 @@ import jinja2
 # It processes html templates.
 templateLoader = jinja2.FileSystemLoader(searchpath="./")
 templateEnv = jinja2.Environment(loader=templateLoader)
-TEMPLATE_FILE = "templates/paper_report_template.html"
+TEMPLATE_FILE = "templates/midterm_report_template_alt.html"
 template = templateEnv.get_template(TEMPLATE_FILE)
 
 def letter_grade(percent):
@@ -52,6 +52,7 @@ with open('rubrics/midterm_paper_rubric.csv', newline='') as csvfile:
 	for row in rubric_rows:
 		score_rubric[counter] = {
 			"name": row[0],
+			"max_points": int(row[2]),
 			1: {"description": row[1], "points": int(row[2])},
 			2: {"description": row[3], "points": int(row[4])},
 			3: {"description": row[5], "points": int(row[6])},
@@ -64,20 +65,24 @@ with open('rubrics/midterm_paper_rubric.csv', newline='') as csvfile:
 		counter += 1
 
 # Open the scores csv, iterate through the rows:
-with open('scores/paper_scores.csv', newline='') as csvfile:
+with open('scores/midterm_scores.csv', newline='') as csvfile:
 	paper_scores = csv.reader(csvfile, delimiter='	', quotechar='|')
 	# call next() once to skip the first row, which is just headers
 	next(paper_scores, None)
+	print("-----------")
+
 	for row in paper_scores:
 		# Each row represents one student. Create a template context for them.
-		total_score = (
+		paper_score = (
 			score_rubric[1][int(row[1])]["points"] +
 			score_rubric[2][int(row[2])]["points"] +
 			score_rubric[3][int(row[3])]["points"] +
-			score_rubric[4][int(row[4])]["points"] +
-			score_rubric[5][int(row[5])]["points"] +
-			[int(row[6])] +	# This is just the raw number of points in the
-			[int(row[7])]   # "questions" and "thesis" columns
+			score_rubric[4][int(row[4])]["points"]
+		)
+		total_score = (
+			paper_score +
+			int(row[6]) + # This is just the raw number of points in the
+			int(row[7])   # "questions" and "thesis" columns
 		)
 		print("total score:")
 		print(total_score)
@@ -86,26 +91,22 @@ with open('scores/paper_scores.csv', newline='') as csvfile:
 		grade = letter_grade(percent)
 
 		context = {
-			"student": {
-				"name": row[0]
-			},
-			"sections": {
-			},
+			"student_name": row[0],
+			"sections": {},
 			"final_grade": {
-				"points": total_score,
+				"paper_score": paper_score,
+				"total_score": total_score,
 				"available_points": available_points,
 				"percent": percent,
 				"letter": grade,
 			},
+			"rubric": score_rubric,
 		}
 
 		for i in range(1, 5):
-			context["sections"][str(i)] = {
-					"name": score_rubric[i]["name"],
-					"tier_description": score_rubric[i][int(row[i])]["description"],
-					"tier_points": score_rubric[i][int(row[i])]["points"],
-				}
-		context["sections"]["questions"] = int(row[7])
+			context[i] = int(row[i])
+		context["questions"] = int(row[6])
+		context["thesis"] = int(row[7])
 
 		print(context)
 
@@ -113,5 +114,5 @@ with open('scores/paper_scores.csv', newline='') as csvfile:
 		sourceHtml = template.render(context=context)
 
 		# process the html into a pdf, name it correctly
-		file_name = "reports/" + context["student"]["name"] + " midterm paper.pdf"
+		file_name = "reports/" + context["student_name"] + " midterm paper.pdf"
 		pdfkit.from_string(sourceHtml, file_name)
