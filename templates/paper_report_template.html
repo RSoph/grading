@@ -3,19 +3,23 @@
 <head>
     <style>
         table {border: 1px solid black; border-collapse: collapse; width: 100%;}
-        th {border: 1px solid black; border-collapse: collapse;}
-        td {border: 1px solid black; border-collapse: collapse;}
+        th {border: 1px solid black; border-collapse: collapse; padding: 5px;}
+        td {border: 1px solid black; border-collapse: collapse; padding: 5px;}
     </style>
 </head>
 <body style="padding: 3rem">
-    <h1>Final Paper</h1>
+    <h1>Midterm Paper</h1>
     Shaping the Modern World<br />
     Spring 2022<br />
     Danielle Bennett
 
     <h3>Student Name: {{ context["student"]["name"] }}</h3>
-
     <br>
+
+    Question Points (out of 10): {{ context["sections"]["questions"] }}
+    Thesis Statement Points (out of 5): {{ context["sections"]["thesis"] }}
+
+    Breakdown of Paper Score: 
     <table class="table">
         <thead style="border: 1px solid black">
             <tr>
