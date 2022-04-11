@@ -48,6 +48,8 @@ with open('rubrics/midterm_paper_rubric.csv', newline='') as csvfile:
 	# call next() once to skip the first row, which is just headers
 	next(rubric_rows, None)
 	counter = 1
+	# available_points would normally start with 0, but I'm hardcoding in 
+	# the 10 and 5 for the first two sections.
 	available_points = 15
 	for row in rubric_rows:
 		score_rubric[counter] = {
@@ -58,6 +60,7 @@ with open('rubrics/midterm_paper_rubric.csv', newline='') as csvfile:
 			3: {"description": row[5], "points": int(row[6])},
 			4: {"description": row[7], "points": int(row[8])},
 			5: {"description": row[9], "points": int(row[10])},
+			6: {"description": row[11], "points": int(row[12])},
 		}
 		# This assumes that the top tier for each section gets
 		# maximum points, i.e. 60 out of 60.
@@ -81,9 +84,10 @@ with open('scores/midterm_scores.csv', newline='') as csvfile:
 		)
 		total_score = (
 			paper_score +
-			int(row[6]) + # This is just the raw number of points in the
-			int(row[7])   # "questions" and "thesis" columns
+			int(row[5]) + # This is just the raw number of points in the
+			int(row[6])   # "questions" and "thesis" columns
 		)
+		comments = row[7]
 		print("total score:")
 		print(total_score)
 
@@ -99,14 +103,15 @@ with open('scores/midterm_scores.csv', newline='') as csvfile:
 				"available_points": available_points,
 				"percent": percent,
 				"letter": grade,
+				"comments": comments,
 			},
 			"rubric": score_rubric,
 		}
 
 		for i in range(1, 5):
-			context[i] = int(row[i])
-		context["questions"] = int(row[6])
-		context["thesis"] = int(row[7])
+			context["sections"][i] = int(row[i])
+		context["questions"] = int(row[5])
+		context["thesis"] = int(row[6])
 
 		print(context)
 

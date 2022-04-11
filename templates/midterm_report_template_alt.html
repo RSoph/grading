@@ -34,10 +34,10 @@
                 {% endfor %}
             </tr>
         </thead>
-        {% for i in range(1, 6): %}
+        {% for i in range(1, 7): %}
             <tr>
                 {% for n in range(1, 5): %}
-                    <td class={{ "highlight" if i == context[n] }}>
+                    <td class={{ "highlight" if i == context["sections"][n] }}>
                         {{ context["rubric"][n][i]["description"] }}<br>
                         ({{ context["rubric"][n][i]["points"] }} points)
                     </td>
@@ -51,6 +51,9 @@
         </tfoot>
     </table>
 
-    <h3>Final Grade: {{context["final_grade"]["total_score"]}}/{{ context["final_grade"]["available_points"] }} ({{ context["final_grade"]["percent"] }}% {{ context["final_grade"]["letter"] }})
+    <h3>Final Grade: {{context["final_grade"]["total_score"]}}/{{ context["final_grade"]["available_points"] }} ({{ context["final_grade"]["percent"] }}% {{ context["final_grade"]["letter"] }})</h3>
+    {% if context["final_grade"]["comments"]: %}
+        <p>Instructor's Comments: {{ context["final_grade"]["comments"] }}</p>
+    {% endif %}
 </body>
 </html>
