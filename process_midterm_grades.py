@@ -48,7 +48,7 @@ with open('rubrics/midterm_paper_rubric.csv', newline='') as csvfile:
 	# call next() once to skip the first row, which is just headers
 	next(rubric_rows, None)
 	counter = 1
-	# available_points would normally start with 0, but I'm hardcoding in 
+	# available_points would normally start with 0, but I'm hardcoding in
 	# the 10 and 5 for the first two sections.
 	available_points = 15
 	for row in rubric_rows:
