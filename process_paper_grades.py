@@ -48,7 +48,7 @@ with open('rubrics/midterm_paper_rubric.csv', newline='') as csvfile:
 	# call next() once to skip the first row, which is just headers
 	next(rubric_rows, None)
 	counter = 1
-	available_points = 15
+	available_points = 0
 	for row in rubric_rows:
 		score_rubric[counter] = {
 			"name": row[0],

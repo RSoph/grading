@@ -8,29 +8,28 @@
     </style>
 </head>
 <body style="padding: 3rem">
-    <h1>Final Paper</h1>
+    <h1>Semester Scores</h1>
     Shaping the Modern World<br />
     Spring 2022<br />
     Danielle Bennett
 
-    <h3>Student Name: {{ context["student"]["name"] }}</h3>
+    <h3>Student Name: {{ context["name"] }}</h3>
 
     <br>
+    <p>Breakdown of Final Score: </p>
     <table class="table">
-        <thead style="border: 1px solid black">
-            <tr>
-                <th>{{ context["sections"]["1"]["name"] }}</th>
-                <th>{{ context["sections"]["2"]["name"] }}</th>
-                <th>{{ context["sections"]["3"]["name"] }}</th>
-                <th>{{ context["sections"]["4"]["name"] }}</th>
-            </tr>
+        <thead>
         </thead>
-        <tr>
-            <td>{{ context["sections"]["1"]["tier_description"] }}<br>({{ context["sections"]["1"]["tier_points"] }} points)</td>
-            <td>{{ context["sections"]["2"]["tier_description"] }}<br>({{ context["sections"]["2"]["tier_points"] }} points)</td>
-            <td>{{ context["sections"]["3"]["tier_description"] }}<br>({{ context["sections"]["3"]["tier_points"] }} points)</td>
-            <td>{{ context["sections"]["4"]["tier_description"] }}<br>({{ context["sections"]["4"]["tier_points"] }} points)</td>
-        </tr>
+        <tbody style="border: 1px solid black">
+            {% for assignment in context["sections"]: %}
+                <tr>
+                    {% for name, points in assignment.items(): %}
+                        {{ name }}: {{ points }} points <br>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            <br>
+        </tbody>
         <tfoot>
             <tr>
                 <td class="text-end"><strong>Total:</strong> {{ context["final_grade"]["points"] }} points</td>
@@ -38,6 +37,6 @@
         </tfoot>
     </table>
 
-    <h3>Final Grade: {{context["final_grade"]["points"]}}/{{ context["final_grade"]["available_points"] }} ({{ context["final_grade"]["percent"] }}% {{ context["final_grade"]["letter"] }})
+    <h3>Final Grade: {{ context["final_grade"]["points"] }}/{{ context["final_grade"]["available_points"] }} ({{ context["final_grade"]["percent"] }}% {{ context["final_grade"]["letter"] }})
 </body>
 </html>
