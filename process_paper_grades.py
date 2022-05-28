@@ -19,8 +19,6 @@ with open('rubrics/final_paper_rubric.csv', newline='') as csvfile:
 	counter = 1
 	available_points = 0
 	for row in rubric_rows:
-		print("current row:")
-		print(row)
 		score_rubric[counter] = {
 			"name": row[0],
 			1: {"description": row[1], "points": int(row[2])},
@@ -49,11 +47,8 @@ with open('scores/paper_scores.csv', newline='') as csvfile:
 			score_rubric[4][int(row[4])]["points"]
 		)
 		comments = row[5]
-		print("total score:")
-		print(total_score)
 
 		percent = round(((total_score / available_points) * 100), 2)
-		# import pdb; pdb.set_trace()
 		grade = helpers.letter_grade(percent)
 
 		context = {
@@ -73,14 +68,7 @@ with open('scores/paper_scores.csv', newline='') as csvfile:
 		}
 
 		for i in range(1, 5):
-			context["sections"][i] = {
-					"name": score_rubric[i]["name"],
-					"tier_description": score_rubric[i][int(row[i])]["description"],
-					"tier_points": score_rubric[i][int(row[i])]["points"],
-				}
 			context["sections"][i] = int(row[i])
-
-		print(context)
 
 		# fill in the html with the context
 		sourceHtml = template.render(context=context)

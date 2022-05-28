@@ -18,7 +18,6 @@ with open('scores/semester_scores.csv', newline='') as csvfile:
 	paper_scores = csv.reader(csvfile, delimiter='	', quotechar='|')
 	# The first row is headers, just read them into a list for lableling later.
 	assignment_names = next(paper_scores)[2:]
-	print(assignment_names)
 	for row in paper_scores:
 		# Each row represents one student. Create a template context for them.
 		total_score = 0

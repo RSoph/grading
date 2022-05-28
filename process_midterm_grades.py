@@ -1,6 +1,7 @@
 import csv
 import pdfkit
 import jinja2
+import helpers
 
 # This is a bunch of stuff I copied and pasted from Stack Overflow.
 # It processes html templates.
@@ -8,38 +9,6 @@ templateLoader = jinja2.FileSystemLoader(searchpath="./")
 templateEnv = jinja2.Environment(loader=templateLoader)
 TEMPLATE_FILE = "templates/midterm_report_template_alt.html"
 template = templateEnv.get_template(TEMPLATE_FILE)
-
-def letter_grade(percent):
-	letters = {
-		9: "A",
-		8: "B",
-		7: "C",
-		6: "D",
-	}
-	adjustments = {
-		9: "+",
-		8: "+",
-		7: "+",
-		6: "",
-		5: "",
-		4: "",
-		3: "",
-		2: "-",
-		1: "-",
-		0: "-",
-	}
-	if percent >= 100:
-		return "A"
-	elif (percent // 10) in letters:
-		letter_grade = letters[percent // 10] # floordiv(percent, 10), gives just the tens digit.
-		adjustment = adjustments[round(percent % 10, 0)] # mod(percent, 10) gives the ones only, then round to nearest integer.
-		grade = letter_grade + adjustment
-		if grade == "A+":
-			return "A"
-		else:
-			return grade
-	else:
-		return "F"
 
 # Open the rubric csv and establish a bunch of variables
 score_rubric = {}
@@ -72,7 +41,6 @@ with open('scores/midterm_scores.csv', newline='') as csvfile:
 	paper_scores = csv.reader(csvfile, delimiter='	', quotechar='|')
 	# call next() once to skip the first row, which is just headers
 	next(paper_scores, None)
-	print("-----------")
 
 	for row in paper_scores:
 		# Each row represents one student. Create a template context for them.
@@ -88,11 +56,9 @@ with open('scores/midterm_scores.csv', newline='') as csvfile:
 			int(row[6])   # "questions" and "thesis" columns
 		)
 		comments = row[7]
-		print("total score:")
-		print(total_score)
 
 		percent = round(((total_score / available_points) * 100), 2)
-		grade = letter_grade(percent)
+		grade = helpers.letter_grade(percent)
 
 		context = {
 			"student_name": row[0],
@@ -112,8 +78,6 @@ with open('scores/midterm_scores.csv', newline='') as csvfile:
 			context["sections"][i] = int(row[i])
 		context["questions"] = int(row[5])
 		context["thesis"] = int(row[6])
-
-		print(context)
 
 		# fill in the html with the context
 		sourceHtml = template.render(context=context)
