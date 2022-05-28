@@ -11,24 +11,25 @@ TEMPLATE_FILE = "templates/semester_report_template.html"
 template = templateEnv.get_template(TEMPLATE_FILE)
 
 # OMG you just hardcoded this!?
-available_points = 600
+available_points = 640
 
 # Open the scores csv, iterate through the rows:
 with open('scores/semester_scores.csv', newline='') as csvfile:
 	paper_scores = csv.reader(csvfile, delimiter='	', quotechar='|')
 	# The first row is headers, just read them into a list for lableling later.
-	assignment_names = next(paper_scores)[1:]
+	assignment_names = next(paper_scores)[2:]
+	print(assignment_names)
 	for row in paper_scores:
 		# Each row represents one student. Create a template context for them.
 		total_score = 0
-		for points in row[1:]:
+		for points in row[2:]:
 			total_score += int(points)
 
 		percent = round(((total_score / available_points) * 100), 2)
 		grade = helpers.letter_grade(percent)
 
 		context = {
-			"name": row[0],
+			"name": row[1] + " " + row[0],
 			"sections": [],
 			"final_grade": {
 				"points": total_score,
@@ -38,8 +39,8 @@ with open('scores/semester_scores.csv', newline='') as csvfile:
 			},
 		}
 
-		for i in range(1, len(assignment_names)+1):
-			context["sections"].append({assignment_names[i-1]: int(row[i])})
+		for i in range(2, len(assignment_names)+2):
+			context["sections"].append({assignment_names[i-2]: int(row[i])})
 
 		# fill in the html with the context
 		sourceHtml = template.render(context=context)

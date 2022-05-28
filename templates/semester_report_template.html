@@ -15,27 +15,14 @@
 
     <h3>Student Name: {{ context["name"] }}</h3>
 
-    <br>
     <p>Breakdown of Final Score: </p>
-    <table class="table">
-        <thead>
-        </thead>
-        <tbody style="border: 1px solid black">
-            {% for assignment in context["sections"]: %}
-                <tr>
-                    {% for name, points in assignment.items(): %}
-                        {{ name }}: {{ points }} points <br>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-            <br>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td class="text-end"><strong>Total:</strong> {{ context["final_grade"]["points"] }} points</td>
-            </tr>
-        </tfoot>
-    </table>
+    {% for assignment in context["sections"]: %}
+        {% for name, points in assignment.items(): %}
+            {{ name }}: {{ points }} points <br>
+        {% endfor %}
+    {% endfor %}
+    <br>
+    <strong>Total:</strong> {{ context["final_grade"]["points"] }} points
 
     <h3>Final Grade: {{ context["final_grade"]["points"] }}/{{ context["final_grade"]["available_points"] }} ({{ context["final_grade"]["percent"] }}% {{ context["final_grade"]["letter"] }})
 </body>

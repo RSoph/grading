@@ -14,3 +14,7 @@ Troubleshooting ideas:
 pip3 install pdfkit
 brew install homebrew/cask/wkhtmltopdf
 ^ This one takes FOREVER and I'm not sure it's necessary. try skipping it and see what happens?
+
+
+It helps if you sort students by last name
+Any assignments left blank you should populate with 0s. Consider just doing a find and replace with two tabs.

@@ -1,55 +1,26 @@
 import csv
 import pdfkit
 import jinja2
+import helpers
 
 # This is a bunch of stuff I copied and pasted from Stack Overflow.
 # It processes html templates.
 templateLoader = jinja2.FileSystemLoader(searchpath="./")
 templateEnv = jinja2.Environment(loader=templateLoader)
-TEMPLATE_FILE = "templates/paper_report_template.html"
+TEMPLATE_FILE = "templates/paper_report_template_full_table.html"
 template = templateEnv.get_template(TEMPLATE_FILE)
-
-def letter_grade(percent):
-	letters = {
-		9: "A",
-		8: "B",
-		7: "C",
-		6: "D",
-	}
-	adjustments = {
-		9: "+",
-		8: "+",
-		7: "+",
-		6: "",
-		5: "",
-		4: "",
-		3: "",
-		2: "-",
-		1: "-",
-		0: "-",
-	}
-	if percent >= 100:
-		return "A"
-	elif (percent // 10) in letters:
-		letter_grade = letters[percent // 10] # floordiv(percent, 10), gives just the tens digit.
-		adjustment = adjustments[round(percent % 10, 0)] # mod(percent, 10) gives the ones only, then round to nearest integer.
-		grade = letter_grade + adjustment
-		if grade == "A+":
-			return "A"
-		else:
-			return grade
-	else:
-		return "F"
 
 # Open the rubric csv and establish a bunch of variables
 score_rubric = {}
-with open('rubrics/midterm_paper_rubric.csv', newline='') as csvfile:
+with open('rubrics/final_paper_rubric.csv', newline='') as csvfile:
 	rubric_rows = csv.reader(csvfile, delimiter='	')
 	# call next() once to skip the first row, which is just headers
 	next(rubric_rows, None)
 	counter = 1
 	available_points = 0
 	for row in rubric_rows:
+		print("current row:")
+		print(row)
 		score_rubric[counter] = {
 			"name": row[0],
 			1: {"description": row[1], "points": int(row[2])},
@@ -57,6 +28,7 @@ with open('rubrics/midterm_paper_rubric.csv', newline='') as csvfile:
 			3: {"description": row[5], "points": int(row[6])},
 			4: {"description": row[7], "points": int(row[8])},
 			5: {"description": row[9], "points": int(row[10])},
+			6: {"description": row[11], "points": int(row[12])},
 		}
 		# This assumes that the top tier for each section gets
 		# maximum points, i.e. 60 out of 60.
@@ -74,16 +46,15 @@ with open('scores/paper_scores.csv', newline='') as csvfile:
 			score_rubric[1][int(row[1])]["points"] +
 			score_rubric[2][int(row[2])]["points"] +
 			score_rubric[3][int(row[3])]["points"] +
-			score_rubric[4][int(row[4])]["points"] +
-			score_rubric[5][int(row[5])]["points"] +
-			[int(row[6])] +	# This is just the raw number of points in the
-			[int(row[7])]   # "questions" and "thesis" columns
+			score_rubric[4][int(row[4])]["points"]
 		)
+		comments = row[5]
 		print("total score:")
 		print(total_score)
 
 		percent = round(((total_score / available_points) * 100), 2)
-		grade = letter_grade(percent)
+		# import pdb; pdb.set_trace()
+		grade = helpers.letter_grade(percent)
 
 		context = {
 			"student": {
@@ -96,16 +67,18 @@ with open('scores/paper_scores.csv', newline='') as csvfile:
 				"available_points": available_points,
 				"percent": percent,
 				"letter": grade,
+				"comments": comments,
 			},
+			"rubric": score_rubric,
 		}
 
 		for i in range(1, 5):
-			context["sections"][str(i)] = {
+			context["sections"][i] = {
 					"name": score_rubric[i]["name"],
 					"tier_description": score_rubric[i][int(row[i])]["description"],
 					"tier_points": score_rubric[i][int(row[i])]["points"],
 				}
-		context["sections"]["questions"] = int(row[7])
+			context["sections"][i] = int(row[i])
 
 		print(context)
 
@@ -113,5 +86,5 @@ with open('scores/paper_scores.csv', newline='') as csvfile:
 		sourceHtml = template.render(context=context)
 
 		# process the html into a pdf, name it correctly
-		file_name = "reports/" + context["student"]["name"] + " midterm paper.pdf"
+		file_name = "reports/" + context["student"]["name"] + " final paper.pdf"
 		pdfkit.from_string(sourceHtml, file_name)

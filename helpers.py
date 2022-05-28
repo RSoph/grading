@@ -1,3 +1,6 @@
+# In the case that someone's percent starts at 89.5, the ones will be rounded up
+# to 10, so we need to have a key of 10 in the adjustments dict.
+
 
 def letter_grade(percent):
 	letters = {
@@ -7,6 +10,7 @@ def letter_grade(percent):
 		6: "D",
 	}
 	adjustments = {
+		10: "+",
 		9: "+",
 		8: "+",
 		7: "+",
