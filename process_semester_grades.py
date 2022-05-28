@@ -28,7 +28,7 @@ with open('scores/semester_scores.csv', newline='') as csvfile:
 		grade = helpers.letter_grade(percent)
 
 		context = {
-			"name": row[1] + " " + row[0],
+			"name": row[0] + " " + row[1],
 			"sections": [],
 			"final_grade": {
 				"points": total_score,
