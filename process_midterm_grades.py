@@ -15,6 +15,7 @@ class_count = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0}
 rubric_csv = 'rubrics/midterm_paper_rubric.csv'
 scores_csv = 'scores/midterm_scores.csv'
 score_rubric = helpers.build_rubric(rubric_csv, 15)
+# ^ Normally available points starts at 0, but here we're adding in sections 1 and 2 manually
 
 # Open the scores csv, iterate through the rows:
 with open(scores_csv, newline='') as csvfile:
@@ -62,10 +63,8 @@ with open(scores_csv, newline='') as csvfile:
 
 		print(context["student_name"] + "   " + context["final_grade"]["letter"])
 
-		# fill in the html with the context
+		# fill in the html with the context, process the html into a pdf, name it correctly
 		sourceHtml = template.render(context=context)
-
-		# process the html into a pdf, name it correctly
 		file_name = "reports/" + context["student_name"] + " midterm paper.pdf"
 		pdfkit.from_string(sourceHtml, file_name)
 
