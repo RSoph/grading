@@ -18,3 +18,5 @@ brew install homebrew/cask/wkhtmltopdf
 
 It helps if you sort students by last name
 Any assignments left blank you should populate with 0s. Consider just doing a find and replace with two tabs.
+
+There's a print statement in the process_semester script that prints out the name and grade. Leave that in place because it's useful for entering into blackboard right away.

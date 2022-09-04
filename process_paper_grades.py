@@ -10,6 +10,8 @@ templateEnv = jinja2.Environment(loader=templateLoader)
 TEMPLATE_FILE = "templates/paper_report_template_full_table.html"
 template = templateEnv.get_template(TEMPLATE_FILE)
 
+class_count = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0}
+
 # Open the rubric csv and establish a bunch of variables
 score_rubric = {}
 with open('rubrics/final_paper_rubric.csv', newline='') as csvfile:
@@ -51,6 +53,8 @@ with open('scores/paper_scores.csv', newline='') as csvfile:
 		percent = round(((total_score / available_points) * 100), 2)
 		grade = helpers.letter_grade(percent)
 
+		class_count[grade[0]] += 1
+
 		context = {
 			"student": {
 				"name": row[0]
@@ -70,9 +74,13 @@ with open('scores/paper_scores.csv', newline='') as csvfile:
 		for i in range(1, 5):
 			context["sections"][i] = int(row[i])
 
+		print(context["student"]["name"] + "   " + context["final_grade"]["letter"])
+
 		# fill in the html with the context
 		sourceHtml = template.render(context=context)
 
 		# process the html into a pdf, name it correctly
 		file_name = "reports/" + context["student"]["name"] + " final paper.pdf"
 		pdfkit.from_string(sourceHtml, file_name)
+
+print(class_count)

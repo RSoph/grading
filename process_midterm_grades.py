@@ -7,8 +7,10 @@ import helpers
 # It processes html templates.
 templateLoader = jinja2.FileSystemLoader(searchpath="./")
 templateEnv = jinja2.Environment(loader=templateLoader)
-TEMPLATE_FILE = "templates/midterm_report_template_alt.html"
+TEMPLATE_FILE = "templates/midterm_report_template_full_table.html"
 template = templateEnv.get_template(TEMPLATE_FILE)
+
+class_count = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0}
 
 # Open the rubric csv and establish a bunch of variables
 score_rubric = {}
@@ -60,6 +62,8 @@ with open('scores/midterm_scores.csv', newline='') as csvfile:
 		percent = round(((total_score / available_points) * 100), 2)
 		grade = helpers.letter_grade(percent)
 
+		class_count[grade[0]] += 1
+
 		context = {
 			"student_name": row[0],
 			"sections": {},
@@ -79,9 +83,13 @@ with open('scores/midterm_scores.csv', newline='') as csvfile:
 		context["questions"] = int(row[5])
 		context["thesis"] = int(row[6])
 
+		print(context["student_name"] + "   " + context["final_grade"]["letter"])
+
 		# fill in the html with the context
 		sourceHtml = template.render(context=context)
 
 		# process the html into a pdf, name it correctly
 		file_name = "reports/" + context["student_name"] + " midterm paper.pdf"
 		pdfkit.from_string(sourceHtml, file_name)
+
+print(class_count)

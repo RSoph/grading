@@ -13,6 +13,8 @@ template = templateEnv.get_template(TEMPLATE_FILE)
 # OMG you just hardcoded this!?
 available_points = 640
 
+class_count = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0}
+
 # Open the scores csv, iterate through the rows:
 with open('scores/semester_scores.csv', newline='') as csvfile:
 	paper_scores = csv.reader(csvfile, delimiter='	', quotechar='|')
@@ -26,6 +28,7 @@ with open('scores/semester_scores.csv', newline='') as csvfile:
 
 		percent = round(((total_score / available_points) * 100), 2)
 		grade = helpers.letter_grade(percent)
+		class_count[grade[0]] += 1
 
 		context = {
 			"name": row[0] + " " + row[1],
@@ -41,9 +44,13 @@ with open('scores/semester_scores.csv', newline='') as csvfile:
 		for i in range(2, len(assignment_names)+2):
 			context["sections"].append({assignment_names[i-2]: int(row[i])})
 
+		print(context["name"] + "   " + context["final_grade"]["letter"])
+
 		# fill in the html with the context
 		sourceHtml = template.render(context=context)
 
 		# process the html into a pdf, name it correctly
 		file_name = "reports/" + context["name"] + " class grade.pdf"
 		pdfkit.from_string(sourceHtml, file_name)
+
+print(class_count)
