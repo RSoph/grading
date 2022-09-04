@@ -10,40 +10,17 @@ templateEnv = jinja2.Environment(loader=templateLoader)
 TEMPLATE_FILE = "templates/midterm_report_template_full_table.html"
 template = templateEnv.get_template(TEMPLATE_FILE)
 
+# Establish class-wide variables
 class_count = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0}
-
-# Open the rubric csv and establish a bunch of variables
-score_rubric = {}
-with open('rubrics/midterm_paper_rubric.csv', newline='') as csvfile:
-	rubric_rows = csv.reader(csvfile, delimiter='	')
-	# call next() once to skip the first row, which is just headers
-	next(rubric_rows, None)
-	counter = 1
-	# available_points would normally start with 0, but I'm hardcoding in
-	# the 10 and 5 for the first two sections.
-	available_points = 15
-	for row in rubric_rows:
-		score_rubric[counter] = {
-			"name": row[0],
-			"max_points": int(row[2]),
-			1: {"description": row[1], "points": int(row[2])},
-			2: {"description": row[3], "points": int(row[4])},
-			3: {"description": row[5], "points": int(row[6])},
-			4: {"description": row[7], "points": int(row[8])},
-			5: {"description": row[9], "points": int(row[10])},
-			6: {"description": row[11], "points": int(row[12])},
-		}
-		# This assumes that the top tier for each section gets
-		# maximum points, i.e. 60 out of 60.
-		available_points += int(row[2])
-		counter += 1
+rubric_csv = 'rubrics/midterm_paper_rubric.csv'
+scores_csv = 'scores/midterm_scores.csv'
+score_rubric = helpers.build_rubric(rubric_csv, 15)
 
 # Open the scores csv, iterate through the rows:
-with open('scores/midterm_scores.csv', newline='') as csvfile:
+with open(scores_csv, newline='') as csvfile:
 	paper_scores = csv.reader(csvfile, delimiter='	', quotechar='|')
 	# call next() once to skip the first row, which is just headers
 	next(paper_scores, None)
-
 	for row in paper_scores:
 		# Each row represents one student. Create a template context for them.
 		paper_score = (
@@ -59,7 +36,7 @@ with open('scores/midterm_scores.csv', newline='') as csvfile:
 		)
 		comments = row[7]
 
-		percent = round(((total_score / available_points) * 100), 2)
+		percent = round(((total_score / score_rubric["available_points"]) * 100), 2)
 		grade = helpers.letter_grade(percent)
 
 		class_count[grade[0]] += 1
@@ -70,7 +47,7 @@ with open('scores/midterm_scores.csv', newline='') as csvfile:
 			"final_grade": {
 				"paper_score": paper_score,
 				"total_score": total_score,
-				"available_points": available_points,
+				"available_points": score_rubric["available_points"],
 				"percent": percent,
 				"letter": grade,
 				"comments": comments,

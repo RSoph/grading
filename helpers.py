@@ -1,7 +1,7 @@
+import csv
+
 # In the case that someone's percent starts at 89.5, the ones will be rounded up
 # to 10, so we need to have a key of 10 in the adjustments dict.
-
-
 def letter_grade(percent):
 	letters = {
 		9: "A",
@@ -34,3 +34,30 @@ def letter_grade(percent):
 			return grade
 	else:
 		return "F"
+
+def build_rubric(rubric_file, minimum_score):
+	with open(rubric_file, newline='') as csvfile:
+		score_rubric = {'available_points': minimum_score}
+		rubric_rows = csv.reader(csvfile, delimiter='	')
+		# call next() once to skip the first row, which is just headers
+		next(rubric_rows, None)
+		counter = 1
+		# available_points would normally start with 0, but I'm hardcoding in
+		# the 10 and 5 for the first two sections.
+		# available_points = 15
+		for row in rubric_rows:
+			score_rubric[counter] = {
+				"name": row[0],
+				"max_points": int(row[2]),
+				1: {"description": row[1], "points": int(row[2])},
+				2: {"description": row[3], "points": int(row[4])},
+				3: {"description": row[5], "points": int(row[6])},
+				4: {"description": row[7], "points": int(row[8])},
+				5: {"description": row[9], "points": int(row[10])},
+				6: {"description": row[11], "points": int(row[12])},
+			}
+			# This assumes that the top tier for each section gets
+			# maximum points, i.e. 60 out of 60.
+			score_rubric["available_points"] += int(row[2])
+			counter += 1
+	return score_rubric
