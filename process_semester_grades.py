@@ -10,13 +10,14 @@ templateEnv = jinja2.Environment(loader=templateLoader)
 TEMPLATE_FILE = "templates/semester_report_template.html"
 template = templateEnv.get_template(TEMPLATE_FILE)
 
+# Establish some class-wide variables
+scores_csv = 'scores/semester_scores.csv'
+class_count = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0}
 # OMG you just hardcoded this!?
 available_points = 640
 
-class_count = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0}
-
 # Open the scores csv, iterate through the rows:
-with open('scores/semester_scores.csv', newline='') as csvfile:
+with open(scores_csv, newline='') as csvfile:
 	paper_scores = csv.reader(csvfile, delimiter='	', quotechar='|')
 	# The first row is headers, just read them into a list for lableling later.
 	assignment_names = next(paper_scores)[2:]
@@ -31,7 +32,7 @@ with open('scores/semester_scores.csv', newline='') as csvfile:
 		class_count[grade[0]] += 1
 
 		context = {
-			"name": row[0] + " " + row[1],
+			"student_name": row[0] + " " + row[1],
 			"sections": [],
 			"final_grade": {
 				"points": total_score,
@@ -44,13 +45,13 @@ with open('scores/semester_scores.csv', newline='') as csvfile:
 		for i in range(2, len(assignment_names)+2):
 			context["sections"].append({assignment_names[i-2]: int(row[i])})
 
-		print(context["name"] + "   " + context["final_grade"]["letter"])
+		print(context["student_name"] + "   " + context["final_grade"]["letter"])
 
 		# fill in the html with the context
 		sourceHtml = template.render(context=context)
 
 		# process the html into a pdf, name it correctly
-		file_name = "reports/" + context["name"] + " class grade.pdf"
+		file_name = "reports/" + context["student_name"] + " class grade.pdf"
 		pdfkit.from_string(sourceHtml, file_name)
 
 print(class_count)

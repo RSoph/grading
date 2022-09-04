@@ -44,6 +44,8 @@ with open(scores_csv, newline='') as csvfile:
 		context = {
 			"student_name": row[0],
 			"sections": {},
+			"questions": int(row[5]),
+			"thesis": int(row[6]),
 			"final_grade": {
 				"paper_score": paper_score,
 				"total_score": total_score,
@@ -57,8 +59,6 @@ with open(scores_csv, newline='') as csvfile:
 
 		for i in range(1, 5):
 			context["sections"][i] = int(row[i])
-		context["questions"] = int(row[5])
-		context["thesis"] = int(row[6])
 
 		print(context["student_name"] + "   " + context["final_grade"]["letter"])
 
