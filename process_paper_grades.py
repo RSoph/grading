@@ -13,7 +13,7 @@ template = templateEnv.get_template(TEMPLATE_FILE)
 
 
 # Establish class-wide variables
-class_count = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0}
+class_count = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0, "number_of_students": 0, "score_total": 0, "score_average": 0}
 rubric_csv = 'rubrics/final_paper_rubric.csv'
 scores_csv = 'scores/paper_scores.csv'
 score_rubric = helpers.build_rubric(rubric_csv, 0)
@@ -36,6 +36,8 @@ with open(scores_csv, newline='') as csvfile:
 		grade = helpers.letter_grade(percent)
 
 		class_count[grade[0]] += 1
+		class_count["number_of_students"] += 1
+		class_count["score_total"] += percent
 
 		context = {
 			"student_name": row[0],
@@ -54,13 +56,16 @@ with open(scores_csv, newline='') as csvfile:
 		for i in range(1, 5):
 			context["sections"][i] = int(row[i])
 
-		print(context["student_name"] + "   " + context["final_grade"]["letter"])
+		student_name_last_first = context["student_name"].split(" ")[-1] + " " + (" ").join(context["student_name"].split(" ")[0:-1])
+
+		print(student_name_last_first + "   " + context["final_grade"]["letter"])
 
 		# fill in the html with the context
 		sourceHtml = template.render(context=context)
 
 		# process the html into a pdf, name it correctly
-		file_name = "reports/" + context["student_name"] + " final paper.pdf"
+		file_name = "reports/" + student_name_last_first + " final paper.pdf"
 		pdfkit.from_string(sourceHtml, file_name)
 
+class_count["score_average"] = class_count["score_total"] / class_count["number_of_students"]
 print(class_count)
