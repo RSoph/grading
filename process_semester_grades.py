@@ -14,7 +14,7 @@ template = templateEnv.get_template(TEMPLATE_FILE)
 scores_csv = 'scores/semester_scores.csv'
 class_count = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0, "number_of_students": 0, "score_total": 0, "score_average": 0}
 # OMG you just hardcoded this!?
-available_points = 640
+available_points = 635
 
 # Open the scores csv, iterate through the rows:
 with open(scores_csv, newline='') as csvfile:
