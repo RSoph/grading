@@ -59,7 +59,7 @@ with open(scores_csv, newline='') as csvfile:
 			context["sections"][i] = int(row[i])
 
 		student_name_last_first = context["student_name"].split(" ")[-1] + " " + (" ").join(context["student_name"].split(" ")[0:-1])
-		print(student_name_last_first + "   " + context["final_grade"]["letter"])
+		print(student_name_last_first + "   " + context["final_grade"]["letter"] + "   " + context["final_grade"]["percent"])
 
 		# fill in the html with the context, process the html into a pdf, name it correctly
 		sourceHtml = template.render(context=context)
