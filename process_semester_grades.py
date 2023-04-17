@@ -20,11 +20,11 @@ available_points = 635
 with open(scores_csv, newline='') as csvfile:
 	paper_scores = csv.reader(csvfile, delimiter='	', quotechar='|')
 	# The first row is headers, just read them into a list for lableling later.
-	assignment_names = next(paper_scores)[2:]
+	assignment_names = next(paper_scores)[1:]
 	for row in paper_scores:
 		# Each row represents one student. Create a template context for them.
 		total_score = 0
-		for points in row[2:]:
+		for points in row[1:]:
 			total_score += int(points)
 
 		percent = round(((total_score / available_points) * 100), 2)
@@ -34,7 +34,7 @@ with open(scores_csv, newline='') as csvfile:
 		class_count["score_total"] += percent
 
 		context = {
-			"student_name": row[0] + " " + row[1],
+			"student_name": row[0],
 			"sections": [],
 			"final_grade": {
 				"points": total_score,

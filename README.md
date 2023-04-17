@@ -17,10 +17,9 @@ brew install homebrew/cask/wkhtmltopdf
 ^ This one takes FOREVER and I'm not sure it's necessary. try skipping it and see what happens?
 
 Painpoints for next semester:
-- It helps if you sort students by last name. Either way, choose first name or last name and stick with it for all assignments. The blackboard-provided csvs aren't always consistent, so you may need to improvise on-the-fly!
+- The first cell should contain the full name, "Link Brender", as it should be rendered in the report. In the terminal printout, it will show last name first. The blackboard-provided csvs aren't always consistent, so you may need to improvise on-the-fly!
 - For paper scores, when Danielle puts in a 0 you should replace it with a 6. Tier 6 is the lowest and it awards 0 points.
 - Any assignments left blank you should populate with 0s. Consider just doing a find and replace with two tabs.
 - Pay very careful attention to the semester scores csv you get from blackboard. The table headers need cleaning up and you can really fuck things up if you do it wrong.
-- There's a print statement in the process_semester script that prints out the name and grade. Leave that in place because it's useful for entering into blackboard right away.
-- Add a print statement for the number grade as well as the letter - that's what you really want to enter to blackboard.
+- There's a print statement in each processscript that prints out the name and grade. Leave that in place because it's useful for entering into blackboard right away.
 - Consider generating a new csv with the whole class containing name, letter grade, number grade and uploading that to google. (I mean, this can just be a c&p from the above print statement, it doesn't have to be a whole thing)
