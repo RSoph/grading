@@ -23,3 +23,7 @@ Painpoints for next semester:
 - Pay very careful attention to the semester scores csv you get from blackboard. The table headers need cleaning up and you can really fuck things up if you do it wrong.
 - There's a print statement in each processscript that prints out the name and grade. Leave that in place because it's useful for entering into blackboard right away.
 - Consider generating a new csv with the whole class containing name, letter grade, number grade and uploading that to google. (I mean, this can just be a c&p from the above print statement, it doesn't have to be a whole thing)
+
+
+pain points for next semester:
+- Make sure your rows and stuff are right. Sometimes Danielle changes the format of the ruberic and it messes things up in both the script and the template.

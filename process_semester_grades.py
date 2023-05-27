@@ -14,7 +14,7 @@ template = templateEnv.get_template(TEMPLATE_FILE)
 scores_csv = 'scores/semester_scores.csv'
 class_count = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0, "number_of_students": 0, "score_total": 0, "score_average": 0}
 # OMG you just hardcoded this!?
-available_points = 635
+available_points = 820
 
 # Open the scores csv, iterate through the rows:
 with open(scores_csv, newline='') as csvfile:
@@ -24,7 +24,7 @@ with open(scores_csv, newline='') as csvfile:
 	for row in paper_scores:
 		# Each row represents one student. Create a template context for them.
 		total_score = 0
-		for points in row[1:]:
+		for points in row[2:]:
 			total_score += int(points)
 
 		percent = round(((total_score / available_points) * 100), 2)
@@ -32,9 +32,10 @@ with open(scores_csv, newline='') as csvfile:
 		class_count[grade[0]] += 1
 		class_count["number_of_students"] += 1
 		class_count["score_total"] += percent
-
+		student_name_last_first = row[0] + " " + row[1]
+		student_name_first_last = row[1] + " " + row[0]
 		context = {
-			"student_name": row[0],
+			"student_name": student_name_first_last,
 			"sections": [],
 			"final_grade": {
 				"points": total_score,
@@ -44,11 +45,11 @@ with open(scores_csv, newline='') as csvfile:
 			},
 		}
 
-		for i in range(2, len(assignment_names)+2):
-			context["sections"].append({assignment_names[i-2]: int(row[i])})
+		for i in range(2, len(assignment_names)+1):
+			context["sections"].append({assignment_names[i-1]: int(row[i])})
 
-		student_name_last_first = context["student_name"].split(" ")[-1] + " " + (" ").join(context["student_name"].split(" ")[0:-1])
-		print(student_name_last_first + "   " + context["final_grade"]["letter"] + "   " + context["final_grade"]["percent"])
+		# student_name_last_first = context["student_name"].split(" ")[-1] + " " + (" ").join(context["student_name"].split(" ")[0:-1])
+		print(student_name_last_first + "   " + context["final_grade"]["letter"] + "   " + str(context["final_grade"]["percent"]))
 
 		# fill in the html with the context
 		sourceHtml = template.render(context=context)
