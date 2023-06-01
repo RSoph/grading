@@ -36,6 +36,10 @@ def letter_grade(percent):
 		return "F"
 
 def build_rubric(rubric_file, minimum_score):
+	# Can we rewrite this to avoid hardcoding the assignment numbers?
+	# There should be a second counter for number of tiers, and it should
+	# add score_ruberic[counter][tier_counter] = {tier_counter: {"description": row[(tier_counter * 2)-1], "points": int(row[tier_counter * 2])"}}.
+	# I'm not sure the above is exactly right, but try it!
 	with open(rubric_file, newline='') as csvfile:
 		score_rubric = {'available_points': minimum_score}
 		rubric_rows = csv.reader(csvfile, delimiter='	')
@@ -51,7 +55,7 @@ def build_rubric(rubric_file, minimum_score):
 				3: {"description": row[5], "points": int(row[6])},
 				4: {"description": row[7], "points": int(row[8])},
 				5: {"description": row[9], "points": int(row[10])},
-				6: {"description": row[11], "points": int(row[12])},
+				# 6: {"description": row[11], "points": int(row[12])},
 			}
 			# This assumes that the top tier for each section gets
 			# maximum points, i.e. 60 out of 60.

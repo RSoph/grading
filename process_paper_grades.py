@@ -54,12 +54,17 @@ with open(scores_csv, newline='') as csvfile:
 			"rubric": score_rubric,
 		}
 
-		for i in range(1, 5):
+		for i in range(1, len(context["sections"])):
 			context["sections"][i] = int(row[i])
 
 		student_name_last_first = context["student_name"].split(" ")[-1] + " " + (" ").join(context["student_name"].split(" ")[0:-1])
 
-		print(student_name_last_first + "   " + context["final_grade"]["letter"] + "   " + str(context["final_grade"]["percent"]))
+		print(
+			student_name_last_first + "   " +
+			context["final_grade"]["letter"] + "   " +
+			str(context["final_grade"]["percent"]) + "	" +
+			str(context["final_grade"]["points"])
+		)
 
 		# fill in the html with the context
 		sourceHtml = template.render(context=context)

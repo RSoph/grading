@@ -14,7 +14,7 @@ template = templateEnv.get_template(TEMPLATE_FILE)
 scores_csv = 'scores/semester_scores.csv'
 class_count = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0, "number_of_students": 0, "score_total": 0, "score_average": 0}
 # OMG you just hardcoded this!?
-available_points = 820
+available_points = 735
 
 # Open the scores csv, iterate through the rows:
 with open(scores_csv, newline='') as csvfile:
@@ -48,7 +48,6 @@ with open(scores_csv, newline='') as csvfile:
 		for i in range(2, len(assignment_names)+1):
 			context["sections"].append({assignment_names[i-1]: int(row[i])})
 
-		# student_name_last_first = context["student_name"].split(" ")[-1] + " " + (" ").join(context["student_name"].split(" ")[0:-1])
 		print(student_name_last_first + "   " + context["final_grade"]["letter"] + "   " + str(context["final_grade"]["percent"]))
 
 		# fill in the html with the context

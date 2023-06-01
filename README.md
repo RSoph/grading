@@ -17,13 +17,14 @@ brew install homebrew/cask/wkhtmltopdf
 ^ This one takes FOREVER and I'm not sure it's necessary. try skipping it and see what happens?
 
 Painpoints for next semester:
-- The first cell should contain the full name, "Link Brender", as it should be rendered in the report. In the terminal printout, it will show last name first. The blackboard-provided csvs aren't always consistent, so you may need to improvise on-the-fly!
+- When Danielle makes a csv from scratch (for midterm and final papers), she usually does "Link Brender". When she downloads from blackboard, it gives "Brender | Link". This fucks everything up every single time. It's currently set up so the paper ones work one way and the semester grades work the other way. Do not mess with this.
 - For paper scores, when Danielle puts in a 0 you should replace it with a 6. Tier 6 is the lowest and it awards 0 points.
-- Any assignments left blank you should populate with 0s. Consider just doing a find and replace with two tabs.
+- Any assignments left blank you should populate with 0s. Just do a find and replace with two tabs until there are no more two tabs.
 - Pay very careful attention to the semester scores csv you get from blackboard. The table headers need cleaning up and you can really fuck things up if you do it wrong.
-- There's a print statement in each processscript that prints out the name and grade. Leave that in place because it's useful for entering into blackboard right away.
-- Consider generating a new csv with the whole class containing name, letter grade, number grade and uploading that to google. (I mean, this can just be a c&p from the above print statement, it doesn't have to be a whole thing)
-
-
-pain points for next semester:
+- There's a print statement in each process script that prints out the name and grade. Leave that in place because it's useful for entering into blackboard right away. Are the total points out of 100? If not, consider printing out the point numbers as well, it can be helpful for entering into blackboard.
 - Make sure your rows and stuff are right. Sometimes Danielle changes the format of the ruberic and it messes things up in both the script and the template.
+- Did the number of assignments change? At the moment assignments are hardcoded in the helper function and template. Can you make them flexible?
+- Did you update the total score?
+- Is the class name correct in the template?
+
+- There's an idea in the helpers file about bettering the ruberic builder. Are you bored? Have some time? Do that.

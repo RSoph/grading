@@ -25,16 +25,16 @@
     <table class="table">
         <thead style="border: 1px solid black">
             <tr>
-                {% for i in range(1, 5): %}
+                {% for i in range(1, context["rubric"]|length): %}
                     <th>
                         {{ context["rubric"][i]["name"] }}<br>
                     </th>
                 {% endfor %}
             </tr>
         </thead>
-        {% for i in range(1, 7): %}
+        {% for i in range(1, (context["rubric"][1]|length)-1)): %}
             <tr>
-                {% for n in range(1, 5): %}
+                {% for n in range(1, context["rubric"]|length): %}
                     <td class={{ "highlight" if i == context["sections"][n] }}>
                         {{ context["rubric"][n][i]["description"] }}<br>
                         ({{ context["rubric"][n][i]["points"] }} points)
