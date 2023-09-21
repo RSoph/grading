@@ -35,13 +35,12 @@ def letter_grade(percent):
 	else:
 		return "F"
 
-def build_rubric(rubric_file, minimum_score):
-	# Can we rewrite this to avoid hardcoding the assignment numbers?
-	# There should be a second counter for number of tiers, and it should
-	# add score_ruberic[counter][tier_counter] = {tier_counter: {"description": row[(tier_counter * 2)-1], "points": int(row[tier_counter * 2])"}}.
-	# I'm not sure the above is exactly right, but try it!
+def build_rubric(rubric_file, already_counted):
+	# already_counted represents the points that are seperate from the essay
+	# portion. They must be added manually into the available_points
+	# because they does not come from the tier system.
 	with open(rubric_file, newline='') as csvfile:
-		score_rubric = {'available_points': minimum_score}
+		score_rubric = {'available_points': already_counted}
 		rubric_rows = csv.reader(csvfile, delimiter='	')
 		# call next() once to skip the first row, which is just headers
 		next(rubric_rows, None)
@@ -50,15 +49,13 @@ def build_rubric(rubric_file, minimum_score):
 			score_rubric[counter] = {
 				"name": row[0],
 				"max_points": int(row[2]),
-				1: {"description": row[1], "points": int(row[2])},
-				2: {"description": row[3], "points": int(row[4])},
-				3: {"description": row[5], "points": int(row[6])},
-				4: {"description": row[7], "points": int(row[8])},
-				5: {"description": row[9], "points": int(row[10])},
-				# 6: {"description": row[11], "points": int(row[12])},
 			}
+			# import pdb; pdb.set_trace()
+			for integer in range(1, 7): # The range here is: (1, number of tiers plus one) That's the same as the number of rows in the whole csv, but I haven't figured out how to do that.
+				score_rubric[counter][integer] = {"description": row[(integer * 2)-1], "points": int(row[integer * 2])}
 			# This assumes that the top tier for each section gets
 			# maximum points, i.e. 60 out of 60.
 			score_rubric["available_points"] += int(row[2])
 			counter += 1
+	print(score_rubric)
 	return score_rubric
