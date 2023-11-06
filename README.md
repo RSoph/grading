@@ -13,7 +13,8 @@ Running notes:
 
 Troubleshooting ideas:
 pip3 install pdfkit
-brew install homebrew/cask/wkhtmltopdf
+pip3 install jinja2
+pip3 install wkhtmltopdf
 ^ This one takes FOREVER and I'm not sure it's necessary. try skipping it and see what happens?
 
 Painpoints for next semester:
