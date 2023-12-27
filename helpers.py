@@ -38,10 +38,11 @@ def letter_grade(percent):
 def build_rubric(rubric_file, already_counted):
 	# already_counted represents the points that are seperate from the essay
 	# portion. They must be added manually into the available_points
-	# because they does not come from the tier system.
+	# because they do not come from the tier system.
 	with open(rubric_file, newline='') as csvfile:
 		score_rubric = {'available_points': already_counted}
 		rubric_rows = csv.reader(csvfile, delimiter='	')
+		# import pdb; pdb.set_trace()
 		# call next() once to skip the first row, which is just headers
 		next(rubric_rows, None)
 		counter = 1
@@ -50,8 +51,7 @@ def build_rubric(rubric_file, already_counted):
 				"name": row[0],
 				"max_points": int(row[2]),
 			}
-			# import pdb; pdb.set_trace()
-			for integer in range(1, 7): # The range here is: (1, number of tiers plus one) That's the same as the number of rows in the whole csv, but I haven't figured out how to do that.
+			for integer in range(1, int((len(row)+1)/2)): # The range here is: (1, number of tiers plus one). This is the number of items in the row, plus one, over two.
 				score_rubric[counter][integer] = {"description": row[(integer * 2)-1], "points": int(row[integer * 2])}
 			# This assumes that the top tier for each section gets
 			# maximum points, i.e. 60 out of 60.

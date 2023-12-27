@@ -11,13 +11,12 @@ templateEnv = jinja2.Environment(loader=templateLoader)
 TEMPLATE_FILE = "templates/paper_report_template_full_table.html"
 template = templateEnv.get_template(TEMPLATE_FILE)
 
-
-
 # Establish class-wide variables
 class_count = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0, "number_of_students": 0, "score_total": 0, "score_average": 0}
 rubric_csv = 'rubrics/final_paper_rubric.csv'
 scores_csv = 'scores/paper_scores.csv'
 score_rubric = helpers.build_rubric(rubric_csv, 0)
+# ^ Normally available points starts at 0, here add in anything outside of the essay score
 
 with open(scores_csv, newline='') as csvfile:
 	paper_scores = csv.reader(csvfile, delimiter='	', quotechar='|')

@@ -27,5 +27,4 @@ Painpoints for next semester:
 - Did the number of assignments change? At the moment assignments are hardcoded in the helper function and template. Can you make them flexible?
 - Did you update the total score?
 - Is the class name correct in the template?
-
-- There's an idea in the helpers file about bettering the ruberic builder. Are you bored? Have some time? Do that.
+- Danielle is considering evaluating Part 1 on its actual merits rather than an up/down. What the hell do we do about that?
