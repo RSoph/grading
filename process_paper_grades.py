@@ -53,7 +53,7 @@ with open(scores_csv, newline='') as csvfile:
 			"rubric": score_rubric,
 		}
 
-		for i in range(1, len(context["sections"])):
+		for i in range(1, len(score_rubric.keys())):
 			context["sections"][i] = int(row[i])
 
 		student_name_last_first = context["student_name"].split(" ")[-1] + " " + (" ").join(context["student_name"].split(" ")[0:-1])
