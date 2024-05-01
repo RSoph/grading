@@ -35,20 +35,18 @@ with open(scores_csv, newline='') as csvfile:
 		student_name_last_first = row[0] + " " + row[1]
 		student_name_first_last = row[1] + " " + row[0]
 		context = {
-			"student_name": student_name_first_last,
+			"available_points": available_points,
+			"letter": grade,
+			"percent": percent,
+			"points": total_score,
 			"sections": [],
-			"final_grade": {
-				"points": total_score,
-				"available_points": available_points,
-				"percent": percent,
-				"letter": grade,
-			},
+			"student_name": student_name_first_last,
 		}
 
 		for i in range(2, len(assignment_names)+1):
 			context["sections"].append({assignment_names[i-1]: int(row[i])})
 
-		print(student_name_last_first + "   " + context["final_grade"]["letter"] + "   " + str(context["final_grade"]["percent"]))
+		print(student_name_last_first + "   " + context["letter"] + "   " + str(context["percent"]))
 
 		# fill in the html with the context
 		sourceHtml = template.render(context=context)

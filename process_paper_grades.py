@@ -8,7 +8,7 @@ import math
 # It processes html templates.
 templateLoader = jinja2.FileSystemLoader(searchpath="./")
 templateEnv = jinja2.Environment(loader=templateLoader)
-TEMPLATE_FILE = "templates/paper_report_template_full_table.html"
+TEMPLATE_FILE = "templates/paper_report_template.html"
 template = templateEnv.get_template(TEMPLATE_FILE)
 
 # Establish class-wide variables
@@ -40,17 +40,13 @@ with open(scores_csv, newline='') as csvfile:
 		class_count["score_total"] += percent
 
 		context = {
-			"student_name": row[0],
-			"sections": {
-			},
-			"final_grade": {
-				"points": total_score,
-				"available_points": score_rubric["available_points"],
-				"percent": percent,
-				"letter": grade,
-				"comments": comments,
-			},
+			"comments": comments,
+			"letter": grade,
+			"percent": percent,
+			"points": total_score,
 			"rubric": score_rubric,
+			"sections": {},
+			"student_name": row[0],
 		}
 
 		for i in range(1, len(score_rubric.keys())):
@@ -60,9 +56,9 @@ with open(scores_csv, newline='') as csvfile:
 
 		print(
 			student_name_last_first + "   " +
-			context["final_grade"]["letter"] + "   " +
-			str(context["final_grade"]["percent"]) + "	" +
-			str(context["final_grade"]["points"])
+			context["letter"] + "   " +
+			str(context["percent"]) + "	" +
+			str(context["points"])
 		)
 
 		# fill in the html with the context

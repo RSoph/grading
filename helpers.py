@@ -42,7 +42,6 @@ def build_rubric(rubric_file, already_counted):
 	with open(rubric_file, newline='') as csvfile:
 		score_rubric = {'available_points': already_counted}
 		rubric_rows = csv.reader(csvfile, delimiter='	')
-		# import pdb; pdb.set_trace()
 		# call next() once to skip the first row, which is just headers
 		next(rubric_rows, None)
 		counter = 1
@@ -53,8 +52,6 @@ def build_rubric(rubric_file, already_counted):
 			}
 			for integer in range(1, int((len(row)+1)/2)): # The range here is: (1, number of tiers plus one). This is the number of items in the row, plus one, over two.
 				score_rubric[counter][integer] = {"description": row[(integer * 2)-1], "points": int(row[integer * 2])}
-			# This assumes that the top tier for each section gets
-			# maximum points, i.e. 60 out of 60.
 			score_rubric["available_points"] += int(row[2])
 			counter += 1
 	print(score_rubric)

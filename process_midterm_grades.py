@@ -41,25 +41,22 @@ with open(scores_csv, newline='') as csvfile:
 		class_count["score_total"] += percent
 
 		context = {
-			"student_name": row[0],
-			"sections": {},
+			"comments": comments,
+			"letter": grade,
+			"paper_score": paper_score,
+			"percent": percent,
 			"questions": int(row[5]),
-			"final_grade": {
-				"paper_score": paper_score,
-				"total_score": total_score,
-				"available_points": score_rubric["available_points"],
-				"percent": percent,
-				"letter": grade,
-				"comments": comments,
-			},
 			"rubric": score_rubric,
+			"sections": {},
+			"student_name": row[0],
+			"total_score": total_score,
 		}
 
 		for i in range(1, len(score_rubric.keys())):
 			context["sections"][i] = int(row[i])
 
 		student_name_last_first = context["student_name"].split(" ")[-1] + " " + (" ").join(context["student_name"].split(" ")[0:-1])
-		print(student_name_last_first + "   " + context["final_grade"]["letter"] + "   " + str(context["final_grade"]["percent"]))
+		print(student_name_last_first + "   " + context["letter"] + "   " + str(context["percent"]))
 
 		# fill in the html with the context, process the html into a pdf, name it correctly
 		sourceHtml = template.render(context=context)

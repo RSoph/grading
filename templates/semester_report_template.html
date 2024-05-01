@@ -9,7 +9,7 @@
 </head>
 <body style="padding: 3rem">
     <h1>Semester Scores</h1>
-    Shaping the Modern World, Fall 2023, Danielle Bennett
+    US History since 1865, Fall 2023, Danielle Bennett
 
     <h3>Student Name: {{ context["student_name"] }}</h3>
 
@@ -20,8 +20,8 @@
         {% endfor %}
     {% endfor %}
     <br>
-    <strong>Total:</strong> {{ context["final_grade"]["points"] }} points
+    <strong>Total:</strong> {{ context["points"] }} points
 
-    <h3>Final Grade: {{ context["final_grade"]["points"] }}/{{ context["final_grade"]["available_points"] }} ({{ context["final_grade"]["percent"] }}% {{ context["final_grade"]["letter"] }})
+    <h3>Final Grade: {{ context["points"] }}/{{ context["available_points"] }} ({{ context["percent"] }}% {{ context["letter"] }})
 </body>
 </html>
