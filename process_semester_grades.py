@@ -2,6 +2,7 @@ import csv
 import pdfkit
 import jinja2
 import helpers
+import math
 
 # This is a bunch of stuff I copied and pasted from Stack Overflow.
 # It processes html templates.
@@ -14,7 +15,7 @@ template = templateEnv.get_template(TEMPLATE_FILE)
 scores_csv = 'scores/semester_scores.csv'
 class_count = {"A": 0, "B": 0, "C": 0, "D": 0, "F": 0, "number_of_students": 0, "score_total": 0, "score_average": 0}
 # OMG you just hardcoded this!?
-available_points = 750
+available_points = 747
 
 # Open the scores csv, iterate through the rows:
 with open(scores_csv, newline='') as csvfile:
@@ -27,7 +28,7 @@ with open(scores_csv, newline='') as csvfile:
 		for points in row[2:]:
 			total_score += int(points)
 
-		percent = round(((total_score / available_points) * 100), 2)
+		percent = round(((total_score / available_points) * 100), 0)
 		grade = helpers.letter_grade(percent)
 		class_count[grade[0]] += 1
 		class_count["number_of_students"] += 1
